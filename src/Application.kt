@@ -1,6 +1,6 @@
 package com.aspanu.whistOnline
 
-import com.aspanu.whistOnline.routes.registerCardRoutes
+import com.aspanu.whistOnline.route.registerCardRoutes
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.gson.*

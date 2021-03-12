@@ -1,4 +1,4 @@
-package com.aspanu.whistOnline.routes
+package com.aspanu.whistOnline.route
 
 import com.aspanu.whistOnline.model.handStorage
 import io.ktor.application.*
