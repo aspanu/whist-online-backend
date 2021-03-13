@@ -3,6 +3,7 @@ package com.aspanu.whistOnline.service
 import com.aspanu.whistOnline.model.Card
 import com.aspanu.whistOnline.model.Player
 import com.aspanu.whistOnline.model.Trick
+import kotlin.math.abs
 
 class TrickHelper {
 
@@ -31,5 +32,16 @@ class TrickHelper {
         }
 
         return trick.playerCards.filter { it.value == highestCard }.keys.first()
+    }
+
+    // Input in order of 'Bid' and 'Tricks'
+    fun calculateScoreChanges(playerBidsTricks: Map<Player, Pair<Int, Int>>): Map<Player, Int> {
+        val scoreHelper = ScoreHelper()
+        // Go through every player, evaluate the amount of tricks they made compared to their bid, take the difference
+        // and send it to the ScoreHelper to get the amount of score they made.
+
+        return playerBidsTricks.mapValues {
+            scoreHelper.calculateScore(it.value.first, abs(it.value.first - it.value.second))
+        }
     }
 }

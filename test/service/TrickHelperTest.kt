@@ -6,6 +6,7 @@ import com.aspanu.whistOnline.model.Trick
 import com.aspanu.whistOnline.service.TrickHelper
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
 class TrickHelperTest {
@@ -34,4 +35,14 @@ class TrickHelperTest {
                 assertEquals(expectedWinningPlayer, trickHelper.trickWinner(trick))
             }
         }
+
+    @Test
+    fun testTrickScores() {
+        val trickResults = mapOf(playerOne to Pair(0, 0), playerTwo to Pair(3, 1), playerThree to Pair(1,7))
+        val scoreChanges = trickHelper.calculateScoreChanges(trickResults)
+        assertEquals(3, scoreChanges.size)
+        assertEquals(5, scoreChanges[playerOne])
+        assertEquals(-3, scoreChanges[playerTwo])
+        assertEquals(-21, scoreChanges[playerThree])
+    }
 }
