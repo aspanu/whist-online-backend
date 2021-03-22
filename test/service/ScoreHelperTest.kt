@@ -1,8 +1,10 @@
 package service
 
+import com.aspanu.whistOnline.service.PlayerHelper
 import com.aspanu.whistOnline.service.ScoreHelper
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Assertions.assertThrows
 
 class ScoreHelperTest {
     private val scoreHelper = ScoreHelper()
@@ -30,5 +32,75 @@ class ScoreHelperTest {
         assertEquals(-21, scoreHelper.calculateScore(0,6))
         assertEquals(-28, scoreHelper.calculateScore(0,7))
         assertEquals(-36, scoreHelper.calculateScore(0,8))
+    }
+
+    @Test
+    fun testCreateScoreboard() {
+        val numPlayers = 4
+        val playerHelper = PlayerHelper()
+        val players = playerHelper.initializePlayers(numPlayers)
+
+        val scoreboard = scoreHelper.createScoreboard(players)
+
+        val numRounds = 12 + (3 * numPlayers)
+        assertEquals(numRounds, scoreboard.rounds.size)
+        assertEquals(0, scoreboard.currentRound)
+        assertEquals(4, scoreboard.players.size)
+
+        var currentRound = 0
+        for (i in 0 until numPlayers) {
+            assertEquals(1, scoreboard.rounds[currentRound].numTricks)
+            assertEquals(i, scoreboard.rounds[currentRound].firstPlayer)
+            currentRound++
+        }
+
+        for (i in 2..7) {
+            assertEquals(i, scoreboard.rounds[currentRound].numTricks)
+            assertEquals(currentRound % numPlayers, scoreboard.rounds[currentRound].firstPlayer)
+            currentRound++
+        }
+
+        for (i in 0 until numPlayers) {
+            assertEquals(8, scoreboard.rounds[currentRound].numTricks)
+            assertEquals(currentRound % numPlayers, scoreboard.rounds[currentRound].firstPlayer)
+            currentRound++
+        }
+
+        for (i in 7 downTo 2) {
+            assertEquals(i, scoreboard.rounds[currentRound].numTricks)
+            assertEquals(currentRound % numPlayers, scoreboard.rounds[currentRound].firstPlayer)
+            currentRound++
+        }
+
+        for (i in 0 until numPlayers) {
+            assertEquals(1, scoreboard.rounds[currentRound].numTricks)
+            assertEquals(currentRound % numPlayers, scoreboard.rounds[currentRound].firstPlayer)
+            currentRound++
+        }
+    }
+
+    @Test
+    fun testAddingBid() {
+        val playerHelper = PlayerHelper()
+        val players = playerHelper.initializePlayers(3)
+        val scoreboard = scoreHelper.createScoreboard(players)
+        scoreHelper.addBid(scoreboard, players[0], 0)
+        scoreHelper.addBid(scoreboard, players[1], 1)
+        scoreHelper.addBid(scoreboard, players[2], 0)
+
+        assertEquals(0, scoreboard.rounds[scoreboard.currentRound].scores[0].bid)
+        assertEquals(1, scoreboard.rounds[scoreboard.currentRound].scores[1].bid)
+        assertEquals(0, scoreboard.rounds[scoreboard.currentRound].scores[2].bid)
+    }
+
+    @Test
+    fun testFailingAtAddingBid() {
+        val playerHelper = PlayerHelper()
+        val players = playerHelper.initializePlayers(5)
+        val scoreboard = scoreHelper.createScoreboard(players)
+        assertThrows(IllegalArgumentException::class.java) { scoreHelper.addBid(scoreboard, players[3], -1) }
+        assertThrows(IllegalArgumentException::class.java) { scoreHelper.addBid(scoreboard, players[3], 12) }
+        scoreHelper.addBid(scoreboard, players[3], 0)
+        assertThrows(IllegalArgumentException::class.java) { scoreHelper.addBid(scoreboard, players[3], 0) }
     }
 }
