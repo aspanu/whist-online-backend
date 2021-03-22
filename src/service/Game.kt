@@ -13,7 +13,7 @@ class Game(private val numPlayers: Int) {
     private val scoreHelper = ScoreHelper()
     private val trickHelper = TrickHelper()
 
-    val gameScoreboard : Scoreboard
+    val scores : Scoreboard
     var currentTrickHand = PlayedCards(mutableMapOf())
     var currentRoundTricks = mutableMapOf<Player, Int>()
     var currentRoundTrump : Card? = null
@@ -31,11 +31,11 @@ class Game(private val numPlayers: Int) {
         val orderedPlayers = playerHelper.randomizePlayerOrder(initializedPlayers)
 
         //With shuffled players, create the scoreboard
-        gameScoreboard = scoreHelper.createScoreboard(orderedPlayers)
+        scores = scoreHelper.createScoreboard(orderedPlayers)
     }
 
     fun bid(player: Player, bidAmount: Int) {
-        scoreHelper.addBid(gameScoreboard, player, bidAmount)
+        scoreHelper.addBid(scores, player, bidAmount)
     }
 
     fun playCard(player: Player, card: Card) {
@@ -47,16 +47,52 @@ class Game(private val numPlayers: Int) {
 
         // If everyone has played their cards, we can finalize this trick
         if (currentTrickHand.cards.size == numPlayers) {
-            // Figure out who won this trick, add it to the list of tricks and then move to the trick
-            val playerOrder = playerHelper.getPlayersInOrder(gameScoreboard.players, gameScoreboard.rounds[gameScoreboard.currentRound].firstPlayer)
-            val trick = Trick(playerOrder= playerOrder, playerCards = currentTrickHand, trumpCard = currentRoundTrump)
-
-            val winningPlayer = trickHelper.trickWinner(trick)
-            currentRoundTricks[winningPlayer] = (currentRoundTricks[winningPlayer]?: 0).plus(1)
-            TODO("Add a way to check if the round is done too and move the 'trick ending' to a separate function")
-
-            currentTrickHand = PlayedCards(mutableMapOf())
+            finalizeTrick()
         }
+
+    }
+
+    private fun finalizeTrick() {
+        // Figure out who won this trick, add it to the list of tricks and then move to the trick
+        val playerOrder = playerHelper.getPlayersInOrder(scores.players, scores.rounds[scores.currentRound].firstPlayer)
+        val trick = Trick(playerOrder= playerOrder, playerCards = currentTrickHand, trumpCard = currentRoundTrump)
+
+        val winningPlayer = trickHelper.trickWinner(trick)
+        currentRoundTricks[winningPlayer] = (currentRoundTricks[winningPlayer] ?: 0).plus(1)
+
+        // If this is the last trick of the round, then finish the round as well
+        if (currentRoundTricks.values.sum() == scores.rounds[scores.currentRound].numTricks) {
+            finalizeRound()
+        }
+
+        currentTrickHand = PlayedCards(mutableMapOf())
+    }
+
+    private fun finalizeRound() {
+        // Figure out the scores, add them to the scoreboard, and advance the round, and check to see if the game is over
+        // Create a "playerBidTricks", get the new scores, update them
+
+        val playerBidTricks = mutableMapOf<Player, Pair<Int, Int>>()
+        scores.players.forEach {
+            val bid = scores.getBid(it, scores.currentRound)
+            playerBidTricks[it] = Pair(bid, currentRoundTricks[it] ?: 0) // If the player didn't make any tricks, they will have 0
+        }
+        val playerWinnings = trickHelper.calculateScoreChanges(playerBidTricks)
+
+        playerWinnings.keys.forEach {
+            scores.addScore(it, scores.currentRound, playerWinnings[it] ?: 0)
+        }
+
+        scores.currentRound++ // Advance the round
+
+        if (scores.currentRound >= scores.rounds.size) {
+            finalizeGame()
+        }
+    }
+
+    private fun finalizeGame() {
+        // Add the 'finish game' logic, which is really just making sure no more hands can be dealt and the score is tallied
+        TODO("Not yet implemented")
     }
 
 }
