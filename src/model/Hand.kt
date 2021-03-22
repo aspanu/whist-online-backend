@@ -5,6 +5,8 @@ val handStorage = mutableMapOf<Int,Hand>(0 to Hand(listOf(Card.ACE_DIAMONDS, Car
 data class Hand(val cards: List<Card>) {
 }
 
+data class PlayedCards(val cards: MutableMap<Player, Card>)
+
 enum class Suit {
     CLUBS,
     DIAMONDS,

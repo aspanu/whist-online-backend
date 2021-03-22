@@ -1,4 +1,4 @@
-package com.aspanu.whistOnline.service
+package com.aspanu.whistOnline.helper
 
 import com.aspanu.whistOnline.model.Card
 import com.aspanu.whistOnline.model.Hand

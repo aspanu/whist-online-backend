@@ -1,4 +1,4 @@
-package com.aspanu.whistOnline.service
+package com.aspanu.whistOnline.helper
 
 import com.aspanu.whistOnline.model.Player
 import com.aspanu.whistOnline.model.Round

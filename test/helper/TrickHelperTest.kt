@@ -1,9 +1,10 @@
-package service
+package helper
 
 import com.aspanu.whistOnline.model.Card
+import com.aspanu.whistOnline.model.PlayedCards
 import com.aspanu.whistOnline.model.Player
 import com.aspanu.whistOnline.model.Trick
-import com.aspanu.whistOnline.service.TrickHelper
+import com.aspanu.whistOnline.helper.TrickHelper
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
@@ -28,7 +29,7 @@ class TrickHelperTest {
         .map { (playerOrder, trumpCard, expectedWinningPlayer) ->
             val trick = Trick(
                 playerOrder = playerOrder,
-                playerCards = mapOf(playerOne to Card.ACE_SPADES, playerTwo to Card.ACE_CLUBS, playerThree to Card.KING_SPADES),
+                playerCards = PlayedCards(mutableMapOf(playerOne to Card.ACE_SPADES, playerTwo to Card.ACE_CLUBS, playerThree to Card.KING_SPADES)),
                 trumpCard = trumpCard,
             )
             DynamicTest.dynamicTest("with player order: $playerOrder and trump card: $trumpCard, $expectedWinningPlayer should win") {

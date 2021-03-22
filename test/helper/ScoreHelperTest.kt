@@ -1,7 +1,7 @@
-package service
+package helper
 
-import com.aspanu.whistOnline.service.PlayerHelper
-import com.aspanu.whistOnline.service.ScoreHelper
+import com.aspanu.whistOnline.helper.PlayerHelper
+import com.aspanu.whistOnline.helper.ScoreHelper
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertThrows

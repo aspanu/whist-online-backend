@@ -1,6 +1,6 @@
-package service
+package helper
 
-import com.aspanu.whistOnline.service.DeckHelper
+import com.aspanu.whistOnline.helper.DeckHelper
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull

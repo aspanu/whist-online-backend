@@ -1,4 +1,4 @@
-package com.aspanu.whistOnline.service
+package com.aspanu.whistOnline.helper
 
 import com.aspanu.whistOnline.model.Card
 import com.aspanu.whistOnline.model.Player
@@ -11,14 +11,14 @@ class TrickHelper {
         // Figure out what the trump suit is, and then see the biggest card in the trump suit or suit first played
 
         val trumpSuit = trick.trumpCard?.suit
-        val firstCardSuit = trick.playerCards[trick.playerOrder[0]]?.suit
+        val firstCardSuit = trick.playerCards.cards[trick.playerOrder[0]]?.suit
             ?: throw IllegalArgumentException("Couldn't find card played.")
 
         var highestCard: Card = Card.TWO_CLUBS
         var firstCard = true
 
         trick.playerOrder.forEach{
-            val cardPlayed = trick.playerCards[it] ?: throw IllegalArgumentException("Couldn't find card played.")
+            val cardPlayed = trick.playerCards.cards[it] ?: throw IllegalArgumentException("Couldn't find card played.")
             if (firstCard) {
                 highestCard = cardPlayed
                 firstCard = false
@@ -31,7 +31,7 @@ class TrickHelper {
             }
         }
 
-        return trick.playerCards.filter { it.value == highestCard }.keys.first()
+        return trick.playerCards.cards.filter { it.value == highestCard }.keys.first()
     }
 
     // Input in order of 'Bid' and 'Tricks'
