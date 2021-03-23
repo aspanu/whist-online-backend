@@ -2,8 +2,9 @@ package com.aspanu.whistOnline.helper
 
 import com.aspanu.whistOnline.model.Card
 import com.aspanu.whistOnline.model.Hand
+import com.aspanu.whistOnline.model.Player
 
-data class HandDealt(val hands: List<Hand>, val trumpCard: Card?)
+data class HandDealt(val playerHands: Map<Player, Hand>, val trumpCard: Card?)
 
 class DeckHelper {
     private val maxHandSize = 8
@@ -26,8 +27,9 @@ class DeckHelper {
         return deck.shuffled()
     }
 
-    fun dealHand(deck: List<Card>, numPlayers: Int, numCards: Int): HandDealt {
+    fun dealHandToPlayers(deck: List<Card>, players: List<Player>, numCards: Int): HandDealt {
         // Create a list of hands and deal cards into them
+        val numPlayers = players.size
         val mutableDeck = deck.map { it }.toMutableList()
         val hands = mutableListOf<Hand>()
         for (i in 0 until numPlayers) {
@@ -35,7 +37,9 @@ class DeckHelper {
         }
 
         val trumpCard = mutableDeck.removeLastOrNull()
-        return HandDealt(hands, trumpCard)
+
+        val playerHands = players.mapIndexed { index, player -> player to hands[index] }.toMap()
+        return HandDealt(playerHands, trumpCard)
     }
 
 }

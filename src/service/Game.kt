@@ -1,8 +1,6 @@
 package com.aspanu.whistOnline.service
 
-import com.aspanu.whistOnline.helper.ScoreHelper
-import com.aspanu.whistOnline.helper.PlayerHelper
-import com.aspanu.whistOnline.helper.TrickHelper
+import com.aspanu.whistOnline.helper.*
 import com.aspanu.whistOnline.model.*
 
 class Game(private val numPlayers: Int) {
@@ -12,18 +10,22 @@ class Game(private val numPlayers: Int) {
     private val playerHelper = PlayerHelper()
     private val scoreHelper = ScoreHelper()
     private val trickHelper = TrickHelper()
+    private val deckHelper = DeckHelper()
 
     val scores : Scoreboard
     var currentTrickHand = PlayedCards(mutableMapOf())
     var currentRoundTricks = mutableMapOf<Player, Int>()
     var currentRoundTrump : Card? = null
+    var finalPlayerScores = mapOf<Player, Int>()
+    var gameComplete = false
+    private val deck : List<Card>
 
     init {
         // Initialize state:
         // Create players
         // Figure out player order
         // Create scoreboard for players in order
-        // Set the current hand being played pointer
+        // Deal the deck
 
         val initializedPlayers = playerHelper.initializePlayers(numPlayers)
 
@@ -32,6 +34,8 @@ class Game(private val numPlayers: Int) {
 
         //With shuffled players, create the scoreboard
         scores = scoreHelper.createScoreboard(orderedPlayers)
+
+        deck = deckHelper.shuffleDeck(numPlayers)
     }
 
     fun bid(player: Player, bidAmount: Int) {
@@ -92,7 +96,11 @@ class Game(private val numPlayers: Int) {
 
     private fun finalizeGame() {
         // Add the 'finish game' logic, which is really just making sure no more hands can be dealt and the score is tallied
-        TODO("Not yet implemented")
+        finalPlayerScores = scores.players.mapIndexed { i, player -> player to scores.rounds.last().scores[i].score }.toMap()
+        gameComplete = true
     }
 
+    fun dealNextHand(): HandDealt {
+        return deckHelper.dealHandToPlayers(deck, scores.players, scores.rounds[scores.currentRound].numTricks)
+    }
 }
