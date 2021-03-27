@@ -39,6 +39,7 @@ class Game(private val numPlayers: Int) {
     }
 
     fun bid(player: Player, bidAmount: Int) {
+        // TODO: Add logic to ensure that bids cannot equal the amount of tricks
         scoreHelper.addBid(scores, player, bidAmount)
     }
 
@@ -87,7 +88,9 @@ class Game(private val numPlayers: Int) {
             scores.addScore(it, scores.currentRound, playerWinnings[it] ?: 0)
         }
 
-        scores.currentRound++ // Advance the round
+        // Reset round
+        scores.currentRound++
+        currentRoundTricks = mutableMapOf()
 
         if (scores.currentRound >= scores.rounds.size) {
             finalizeGame()
@@ -100,7 +103,7 @@ class Game(private val numPlayers: Int) {
         gameComplete = true
     }
 
-    fun dealNextHand(): HandDealt {
+    fun dealNextRound(): HandDealt {
         return deckHelper.dealHandToPlayers(deck, scores.players, scores.rounds[scores.currentRound].numTricks)
     }
 }
