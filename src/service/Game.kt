@@ -39,7 +39,7 @@ class Game(private val numPlayers: Int) {
     }
 
     fun bid(player: Player, bidAmount: Int) {
-        // TODO: Add logic to ensure that bids cannot equal the amount of tricks
+        TODO("Add logic to ensure that bids cannot equal the amount of tricks")
         scoreHelper.addBid(scores, player, bidAmount)
     }
 

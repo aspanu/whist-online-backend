@@ -1,6 +1,7 @@
 package com.aspanu.whistOnline.helper
 
 import com.aspanu.whistOnline.model.Player
+import kotlin.random.Random
 
 class PlayerHelper {
     fun initializePlayers(numPlayers: Int): List<Player> {

@@ -34,9 +34,3 @@ fun Route.cardRouting() {
         }
     }
 }
-
-fun Application.registerCardRoutes() {
-    routing {
-        cardRouting()
-    }
-}
