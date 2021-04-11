@@ -2,14 +2,15 @@ package com.aspanu.whistOnline
 
 import com.aspanu.whistOnline.route.cardRouting
 import com.aspanu.whistOnline.route.gameRouting
-import com.aspanu.whistOnline.route.webSocketRouting
+import com.ryanharter.ktor.moshi.moshi
+import com.squareup.moshi.adapters.Rfc3339DateJsonAdapter
 import io.ktor.application.*
 import io.ktor.features.*
-import io.ktor.gson.*
 import io.ktor.http.cio.websocket.*
 import io.ktor.routing.*
 import io.ktor.websocket.*
 import java.time.Duration
+import java.util.*
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -17,9 +18,9 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
     install(ContentNegotiation) {
-        gson {
-            setPrettyPrinting()
-            disableHtmlEscaping()
+        moshi {
+            // Configure the Moshi.Builder here
+            add(Date::class.java, Rfc3339DateJsonAdapter())
         }
     }
     install(WebSockets) {
@@ -30,7 +31,6 @@ fun Application.module(testing: Boolean = false) {
     routing {
         cardRouting()
         gameRouting()
-        webSocketRouting()
     }
 }
 

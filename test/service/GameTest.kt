@@ -47,14 +47,15 @@ class GameTest {
         game.playCard(player2, card = Card.TWO_CLUBS)
         game.playCard(player3, card = Card.TWO_DIAMONDS)
 
-        assertEquals(0, game.scores.rounds[game.scores.currentRound-1].scores[0].bid)
-        assertEquals(1, game.scores.rounds[game.scores.currentRound-1].scores[1].bid)
-        assertEquals(0, game.scores.rounds[game.scores.currentRound-1].scores[2].bid)
-        assertEquals(1, game.scores.rounds[game.scores.currentRound-1].scores[3].bid)
+        val currentRound = game.scores.rounds[game.scores.currentRound - 1]
+        assertEquals(0, currentRound.scores[0].bid)
+        assertEquals(1, currentRound.scores[1].bid)
+        assertEquals(0, currentRound.scores[2].bid)
+        assertEquals(1, currentRound.scores[3].bid)
 
-        assertEquals(5, game.scores.rounds[game.scores.currentRound-1].scores[0].score)
-        assertEquals(6, game.scores.rounds[game.scores.currentRound-1].scores[1].score)
-        assertEquals(5, game.scores.rounds[game.scores.currentRound-1].scores[2].score)
-        assertEquals(-1, game.scores.rounds[game.scores.currentRound-1].scores[3].score)
+        assertEquals(5, currentRound.scores[0].score)
+        assertEquals(6, currentRound.scores[1].score)
+        assertEquals(5, currentRound.scores[2].score)
+        assertEquals(-1, currentRound.scores[3].score)
     }
 }

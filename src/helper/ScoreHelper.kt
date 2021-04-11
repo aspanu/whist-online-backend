@@ -65,16 +65,28 @@ class ScoreHelper {
             throw IllegalArgumentException("A bid cannot be negative.")
         }
 
-        if (bid > scoreboard.rounds[scoreboard.currentRound].numTricks) {
+        val currentRound = scoreboard.rounds[scoreboard.currentRound]
+
+        if (bid > currentRound.numTricks) {
             // Bids cannot be larger than the current number of tricks
             throw IllegalArgumentException("A bid cannot be larger than the number of tricks available.")
         }
 
-        if (scoreboard.rounds[scoreboard.currentRound].scores[playerIndex].bid >= 0) {
+        if (currentRound.scores[playerIndex].bid >= 0) {
             // Player has already bid once, this is an error
             throw IllegalArgumentException("This player has already made a bid.")
         }
 
-        scoreboard.rounds[scoreboard.currentRound].scores[playerIndex].bid = bid
+        // Check to see if this is the last player to bid, and if so, this bid cannot be equal to
+        // number of tricks
+        if (currentRound.scores.count { it.bid >= 0 } == scoreboard.players.size - 1) {
+            // This is the last player to bid
+            if (currentRound.scores.sumOf { it.bid } + bid == currentRound.numTricks - 1) {
+                // -1 is added since bids initialized to value of '-1'
+                throw IllegalStateException("A player is attempting to bid an amount adding up to trick number.")
+            }
+        }
+
+        currentRound.scores[playerIndex].bid = bid
     }
 }

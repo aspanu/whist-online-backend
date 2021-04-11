@@ -102,5 +102,9 @@ class ScoreHelperTest {
         assertThrows(IllegalArgumentException::class.java) { scoreHelper.addBid(scoreboard, players[3], 12) }
         scoreHelper.addBid(scoreboard, players[3], 0)
         assertThrows(IllegalArgumentException::class.java) { scoreHelper.addBid(scoreboard, players[3], 0) }
+        scoreHelper.addBid(scoreboard, players[0], 0)
+        scoreHelper.addBid(scoreboard, players[1], 0)
+        scoreHelper.addBid(scoreboard, players[2], 0)
+        assertThrows(IllegalStateException::class.java) { scoreHelper.addBid(scoreboard, players[4], 1) }
     }
 }
