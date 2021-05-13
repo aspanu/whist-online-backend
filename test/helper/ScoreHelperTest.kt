@@ -86,11 +86,11 @@ class ScoreHelperTest {
         val scoreboard = scoreHelper.createScoreboard(players)
         scoreHelper.addBid(scoreboard, players[0], 0)
         scoreHelper.addBid(scoreboard, players[1], 1)
-        scoreHelper.addBid(scoreboard, players[2], 0)
+        scoreHelper.addBid(scoreboard, players[2], 1)
 
         assertEquals(0, scoreboard.rounds[scoreboard.currentRound].scores[0].bid)
         assertEquals(1, scoreboard.rounds[scoreboard.currentRound].scores[1].bid)
-        assertEquals(0, scoreboard.rounds[scoreboard.currentRound].scores[2].bid)
+        assertEquals(1, scoreboard.rounds[scoreboard.currentRound].scores[2].bid)
     }
 
     @Test

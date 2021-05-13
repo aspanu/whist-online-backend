@@ -1,0 +1,9 @@
+language: kotlin
+install: skip
+
+os: linux
+dist: trusty
+jdk: oraclejdk14
+
+script:
+  - ./gradlew test

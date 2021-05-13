@@ -103,6 +103,9 @@ class Game(private val numPlayers: Int) {
     }
 
     fun dealNextRound(): HandDealt {
-        return deckHelper.dealHandToPlayers(deck, scores.players, scores.rounds[scores.currentRound].numTricks)
+        val handDealt = deckHelper.dealHandToPlayers(deck, scores.players, scores.rounds[scores.currentRound].numTricks)
+        this.currentRoundTrump = handDealt.trumpCard
+        // TODO: Save the rest of the cards dealt and then compare them to what each player is playing
+        return handDealt
     }
 }
