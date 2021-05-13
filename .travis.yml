@@ -1,9 +1,8 @@
-language: kotlin
-install: skip
-
-os: linux
-dist: trusty
-jdk: oraclejdk14
-
+language: java
+jdk:
+  - oraclejdk14
+before_install:
+  - chmod +x gradlew
+  - chmod +x gradle/wrapper/gradle-wrapper.jar
 script:
-  - ./gradlew test
+  - ./gradlew test build
