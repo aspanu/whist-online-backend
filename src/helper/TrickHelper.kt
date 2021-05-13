@@ -27,6 +27,7 @@ class TrickHelper {
             } else if (cardPlayed.suit == trumpSuit) {
                 highestCard = if (highestCard.suit == firstCardSuit) cardPlayed
                 else if (highestCard.suit == trumpSuit && cardPlayed.magnitude > highestCard.magnitude) cardPlayed
+                else if (highestCard.suit == trumpSuit) highestCard
                 else throw IllegalArgumentException("We played a trump and the highest card was neither the trump or highest card suits.")
             }
         }

@@ -15,6 +15,7 @@ class TrickHelperTest {
     private val playerOne = Player(1)
     private val playerTwo = Player(2)
     private val playerThree = Player(3)
+    private val playerFour = Player(4)
 
     private val testData = listOf(
         Triple(listOf(playerOne, playerTwo, playerThree), null, playerOne),
@@ -36,6 +37,18 @@ class TrickHelperTest {
                 assertEquals(expectedWinningPlayer, trickHelper.trickWinner(trick))
             }
         }
+
+
+    @Test
+    fun testTrickWinnerEdgeCase() {
+        val playerOrder = listOf(playerOne, playerTwo, playerThree, playerFour)
+        val playerCards = PlayedCards(mutableMapOf(playerOne to Card.EIGHT_CLUBS, playerTwo to Card.KING_SPADES, playerThree to Card.JACK_SPADES, playerFour to Card.ACE_HEARTS))
+        val trumpCard = Card.ACE_SPADES
+
+        val trick = Trick(playerOrder, playerCards, trumpCard)
+        val winner = trickHelper.trickWinner(trick)
+        assertEquals(playerTwo, winner, "Expected $playerTwo to win, but instead got $winner")
+    }
 
     @Test
     fun testTrickScores() {
